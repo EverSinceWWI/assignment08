@@ -1,5 +1,6 @@
 var colorList = ['#ffc4c8','#5e5e5e','#3aa3ff','#121212']; //Pink,Grey,Blue,BlackBeast
-
+var beastHitLeft=false;
+var beastHitRight=false;
 function setup() {
   createCanvas(innerWidth,innerHeight);
   angleMode(DEGREES);
@@ -7,7 +8,7 @@ function setup() {
 }
 
 function draw() {
-
+  collideDebug(true);
   var alphaZ=rotationZ;
   var betaX=rotationX;
   var gammaY=rotationY;
@@ -33,6 +34,7 @@ var playerRadius=25;
     //
     var winCollide=false;
     winCollide=collideCircleCircle(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),50,width/2,47,80);
+    textSize(32);
 
     //HELP text
     push();
@@ -44,52 +46,138 @@ var playerRadius=25;
     //The Black Beast
     Beast(colorList[3]);
 
+    var spikeList = [380,300,200,160,85,35];
+    var spikePosition=[990,770,660,550,440];
+
+    //Teeth, left row
     for(i=0;i<1330;i+=110) {
     fill(235);
-    triangle(map(beastBetaX,45,-60,1,width/2),0+i,map(beastBetaX,45,-60,1,width/2),100+i,map(beastBetaX,45,-60,1,width/2)+50,50+i);
+    var spikeLeft=0;
+    if(i==770) {spikeLeft=spikeList[1];}
+    if(i==440) {spikeLeft=spikeList[3];}
+    triangle(map(beastBetaX,45,-60,1,width/2),0+i,map(beastBetaX,45,-60,1,width/2),100+i,map(beastBetaX,45,-60,1,width/2)+50+spikeLeft,50+i);
+
+    var triPolyTeethLeft = [];
+    var trisL = [];
+
+    trisL[i] = [
+    triPolyTeethLeft[0] = createVector((beastBetaX,45,-60,1,width/2),0+i),
+    triPolyTeethLeft[1] = createVector(map(beastBetaX,45,-60,1,width/2),100+i),
+    triPolyTeethLeft[2] = createVector(map(beastBetaX,45,-60,1,width/2)+50+spikeLeft,50+i),
+  ];
+    var hitTeethLeft = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,trisL[i]);
   }
-    for(i=0;i<1440;i+=110) {
+
+  //Teeth, Right row
+    for(o=0;o<1440;o+=110) {
     fill(235);
-    triangle(map(beastBetaX,45,-60,width,width/2),0+i-50,map(beastBetaX,45,-60,width,width/2),100+i-50,map(beastBetaX,45,-60,width,width/2)-50,i);
+    var spikeRight=0;
+    if(o==990) {spikeRight=spikeList[1];}
+    if(o==770) {spikeRight=spikeList[2];}
+    if(o==660) {spikeRight=spikeList[0];}
+    if(o==550) {spikeRight=spikeList[4];}
+    if(o==440) {spikeRight=spikeList[5];}
+    triangle(map(beastBetaX,45,-60,width,width/2),0+o-50,map(beastBetaX,45,-60,width,width/2),100+o-50,map(beastBetaX,45,-60,width,width/2)-50-spikeRight,o);
+
+    var triPolyTeethRight = [];
+    var trisR = [];
+    trisR[o] = [
+    triPolyTeethRight[0] = createVector((beastBetaX,45,-60,1,width/2),0+o),
+    triPolyTeethRight[1] = createVector(map(beastBetaX,45,-60,1,width/2),100+o),
+    triPolyTeethRight[2] = createVector(map(beastBetaX,45,-60,1,width/2)+50+spikeRight,50+o),
+  ];
+    var hitTeethRight = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,trisR[o]);
   }
 
-  //SPECIAL TRIANGLES
-  var a=300;
-  triangle(map(beastBetaX,45,-60,1,width/2),0+770,map(beastBetaX,45,-60,1,width/2),100+770,map(beastBetaX,45,-60,1,width/2)+50+a,50+770);
+  //RIGHT-COLLISIONS
 
-  triangle(map(beastBetaX,45,-60,width,width/2),0+990-50,map(beastBetaX,45,-60,width,width/2),100+990-50,map(beastBetaX,45,-60,width,width/2)-50-a,990);
+  var hitbox = 42;
 
-  var hit=false;
+  var hit990=false;
+  var hit770R=false;
+  var hit770L=false;
+  var hit660=false;
+  var hit550=false;
+  var hit440R=false;
+  var hit440L=false;
+  var hitTeethLeft=false;
+  var hitTeethRight=false;
 
-  var triPoly = [];
+  var triPoly990 = [];
 
-  triPoly[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+990-50);
-  triPoly[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+990-50);
-  triPoly[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-a,990);
+  triPoly990[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+990-50);
+  triPoly990[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+990-50);
+  triPoly990[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[1],990);
 
-  hit = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(beastBetaX,-60,60,1,height),40,triPoly);
+  var hit990 = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly990);
 
-  var b=200;
-  triangle(map(beastBetaX,45,-60,1,width/2),0+440,map(beastBetaX,45,-60,1,width/2),100+440,map(beastBetaX,45,-60,1,width/2)+50+b,50+440);
+  var triPoly770R = [];
 
-  var c=160;
-  triangle(map(beastBetaX,45,-60,width,width/2),0+770-50,map(beastBetaX,45,-60,width,width/2),100+770-50,map(beastBetaX,45,-60,width,width/2)-50-c,770);
+  triPoly770R[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+770-50);
+  triPoly770R[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+770-50);
+  triPoly770R[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[2],770);
 
-  var d=380;
-  triangle(map(beastBetaX,45,-60,width,width/2),0+660-50,map(beastBetaX,45,-60,width,width/2),100+660-50,map(beastBetaX,45,-60,width,width/2)-50-d,660);
-  var e=85;
-  triangle(map(beastBetaX,45,-60,width,width/2),0+550-50,map(beastBetaX,45,-60,width,width/2),100+550-50,map(beastBetaX,45,-60,width,width/2)-50-e,550);
+  var hit770R = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly770R);
 
-  var f=35;
-  triangle(map(beastBetaX,45,-60,width,width/2),0+440-50,map(beastBetaX,45,-60,width,width/2),100+440-50,map(beastBetaX,45,-60,width,width/2)-50-f,440);
-    pop();
+  var triPoly550 = [];
+
+  triPoly550[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+550-50);
+  triPoly550[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+550-50);
+  triPoly550[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[4],550);
+
+  var hit550 = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly550);
+
+  var triPoly660 = [];
+
+  triPoly660[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+660-50);
+  triPoly660[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+660-50);
+  triPoly660[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[0],660);
+
+  var hit660 = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly660);
+
+  var triPoly440R = [];
+
+  triPoly440R[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+440-50);
+  triPoly440R[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+440-50);
+  triPoly440R[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[5],440);
+
+  var hit440R = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly440R);
+
+  //LEFT-COLLISIONS
+
+  var triPoly770L = [];
+
+  triPoly770L[0] = createVector(map(beastBetaX,45,-60,1,width/2),0+770);
+  triPoly770L[1] = createVector(map(beastBetaX,45,-60,1,width/2),100+770);
+  triPoly770L[2] = createVector(map(beastBetaX,45,-60,1,width/2)+50+spikeList[1],50+770);
+
+  var hit770R = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly770L);
+
+  var triPoly440L = [];
+
+  triPoly440L[0] = createVector(map(beastBetaX,45,-60,1,width/2),0+440);
+  triPoly440L[1] = createVector(map(beastBetaX,45,-60,1,width/2),100+440);
+  triPoly440L[2] = createVector(map(beastBetaX,45,-60,1,width/2)+50+spikeList[3],50+440);
+
+  var hit440L = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly440L);
   }
+
 
 //GAMEOVER/VICTORY EVENTS
-if(hit==true) {
+if(
+  hit990==true
+  || hit770R==true
+  || hit550==true
+  || hit440R==true
+  || hit770L==true
+  || hit440L==true
+  || hitTeethLeft==true
+  || hitTeethRight==true
+  || beastHitLeft==true
+  || beastHitRight==true
+  ) {
   textAlign(CENTER);
-  fill('red');
-  rect(0,0,width,height);
+  background('red')
   fill(18);
   textSize(150);
   push();
@@ -107,8 +195,7 @@ if(hit==true) {
 if(winCollide==true) {
   push();
 
-  fill(235);
-  rect(0,0,width,height);
+  background(235);
   fill(18);
   translate(0,-150);
   textAlign(CENTER);
@@ -179,6 +266,9 @@ if(beastBetaX<-45) {beastBetaX=-45};
   fill(beastColor);
   rect(beastX_L,beastY_L,beastW_L,beastH_L);
   rect(beastX_R,beastY_R,beastW_R,beastH_R);
+
+  beastHitLeft = collideRectCircle(beastX_L,beastY_L,beastW_L,beastH_L,rGammaY,-20,20,1,width/2,50);
+  beastHitRight = collideRectCircle(beastX_R,beastY_R,beastW_R,beastH_R,rGammaY,-20,20,1,width/2,50);
 
   fill('#212121');
   arc(map(beastBetaX,45,-60,1,width/2)-width/5,height/5,180,180,-110,70);
