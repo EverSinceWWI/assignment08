@@ -102,6 +102,8 @@ var playerRadius=25;
   var hit440L=false;
   var hitTeethLeft=false;
   var hitTeethRight=false;
+  var beastHitLeft=false;
+  var beastHitRight=false;
 
   var triPoly990 = [];
 
@@ -162,6 +164,8 @@ var playerRadius=25;
   var hit440L = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly440L);
   }
 
+  var beastHitLeft = collideRectCircle(this.beastX_L,this.beastY_L,this.beastW_L,this.beastH_L,this.rGammaY,-20,20,1,width/2,this.playerSize);
+  var beastHitRight = collideRectCircle(this.beastX_R,this.beastY_R,this.beastW_R,this.beastH_R,this.rGammaY,-20,20,1,width/2,this.playerSize);
 
 //GAMEOVER/VICTORY EVENTS
 if(
@@ -267,9 +271,6 @@ if(beastBetaX<-45) {beastBetaX=-45};
   fill(beastColor);
   rect(beastX_L,beastY_L,beastW_L,beastH_L);
   rect(beastX_R,beastY_R,beastW_R,beastH_R);
-
-  beastHitLeft = collideRectCircle(beastX_L,beastY_L,beastW_L,beastH_L,rGammaY,-20,20,1,width/2,50);
-  beastHitRight = collideRectCircle(beastX_R,beastY_R,beastW_R,beastH_R,rGammaY,-20,20,1,width/2,50);
 
   fill('#212121');
   arc(map(beastBetaX,45,-60,1,width/2)-width/5,height/5,180,180,-110,70);
