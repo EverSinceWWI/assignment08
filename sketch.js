@@ -46,7 +46,7 @@ var playerRadius=25;
     //The Black Beast
     Beast(colorList[3]);
 
-    var spikeList = [380,300,200,160,85,35];
+    var spikeList = [350,300,200,160,85,35];
     var spikePosition=[990,770,660,550,440];
 
     //Teeth, left row
@@ -54,7 +54,7 @@ var playerRadius=25;
     fill(235);
     var spikeLeft=0;
     if(i==770) {spikeLeft=spikeList[1];}
-    if(i==440) {spikeLeft=spikeList[3];}
+    if(i==440) {spikeLeft=spikeList[2];}
     triangle(map(beastBetaX,45,-60,1,width/2),0+i,map(beastBetaX,45,-60,1,width/2),100+i,map(beastBetaX,45,-60,1,width/2)+50+spikeLeft,50+i);
 
     var triPolyTeethLeft = [];
@@ -123,7 +123,7 @@ var playerRadius=25;
 
   triPoly550[0] = createVector(map(beastBetaX,45,-60,width,width/2),0+550-50);
   triPoly550[1] = createVector(map(beastBetaX,45,-60,width,width/2),100+550-50);
-  triPoly550[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[4],550);
+  triPoly550[2] = createVector(map(beastBetaX,45,-60,width,width/2)-50-spikeList[4],7550);
 
   var hit550 = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly550);
 
@@ -157,7 +157,7 @@ var playerRadius=25;
 
   triPoly440L[0] = createVector(map(beastBetaX,45,-60,1,width/2),0+440);
   triPoly440L[1] = createVector(map(beastBetaX,45,-60,1,width/2),100+440);
-  triPoly440L[2] = createVector(map(beastBetaX,45,-60,1,width/2)+50+spikeList[3],50+440);
+  triPoly440L[2] = createVector(map(beastBetaX,45,-60,1,width/2)+50+spikeList[2],50+440);
 
   var hit440L = collideCirclePoly(map(rGammaY,-20,20,1,width/2),map(rBetaX,-60,60,1,height),hitbox,triPoly440L);
   }
@@ -168,6 +168,7 @@ if(
   hit990==true
   || hit770R==true
   || hit550==true
+  || hit660==true
   || hit440R==true
   || hit770L==true
   || hit440L==true
